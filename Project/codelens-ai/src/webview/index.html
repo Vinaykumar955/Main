@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src {{style_css}} 'unsafe-inline'; script-src 'nonce-{{nonce}}';">
+  <title>CodeLens AI</title>
+  <link rel="stylesheet" href="{{style_css}}">
+</head>
+<body>
+  <div class="container" role="application" aria-label="CodeLens AI">
+    <!-- Tab Bar -->
+    <nav class="tab-bar" role="tablist" aria-label="Main navigation">
+      <button class="tab-button active" role="tab" aria-selected="true" aria-controls="panel-chat" id="tab-chat" data-tab="chat" tabindex="0">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M1.5 2h13l.5.5v9l-.5.5H4.7L2.1 14.2 2 14v-2H1.5l-.5-.5v-9l.5-.5zM2 3v8.5H3V13l2.1-1.5H14V3H2z"/></svg>
+        <span>Chat</span>
+      </button>
+      <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-history" id="tab-history" data-tab="history" tabindex="-1">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2zM1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8zm7.5-4v4.5H5v-1h2.5V4H8z"/></svg>
+        <span>History</span>
+      </button>
+      <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-bookmarks" id="tab-bookmarks" data-tab="bookmarks" tabindex="-1">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M3.5 1h9l.5.5v13l-.5.5-4.5-3.5L3.5 15l-.5-.5v-13l.5-.5zM4 2v11.5l4-3 4 3V2H4z"/></svg>
+        <span>Bookmarks</span>
+      </button>
+      <button class="tab-button" role="tab" aria-selected="false" aria-controls="panel-settings" id="tab-settings" data-tab="settings" tabindex="-1">
+        <svg class="tab-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6 1h4l.5.5v2.3l1.1.6 1.9-.8 1.4 1.4-.8 1.9.6 1.1h2.3l.5.5v4l-.5.5h-2.3l-.6 1.1.8 1.9-1.4 1.4-1.9-.8-1.1.6v2.3l-.5.5H6l-.5-.5v-2.3l-1.1-.6-1.9.8-1.4-1.4.8-1.9L2.5 10H.2l-.5-.5v-4l.5-.5h2.3l.6-1.1-.8-1.9L3.7 1.5l1.9.8L6.5 1.8V1.5L6 1zm1 1v2.5l-.4.2-1.7-.9-1 1 .9 1.7-.2.4H2v2h2.5l.2.4-.9 1.7 1 1 1.7-.9.4.2V14h2v-2.5l.4-.2 1.7.9 1-1-.9-1.7.2-.4H14V6h-2.5l-.2-.4.9-1.7-1-1-1.7.9-.4-.2V2H7zm1 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM8 7a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Chat Tab -->
+      <section class="tab-pane active" id="panel-chat" role="tabpanel" aria-labelledby="tab-chat">
+        <header class="chat-header">
+          <h1 class="chat-title">CodeLens AI</h1>
+          <div class="depth-slider" role="radiogroup" aria-label="Depth level" data-setting="depthLevel">
+            <label class="depth-option" data-depth="what">
+              <input type="radio" name="depth" value="what" checked aria-label="What - basic explanation">
+              <span class="depth-label">What</span>
+            </label>
+            <label class="depth-option" data-depth="how">
+              <input type="radio" name="depth" value="how" aria-label="How - detailed explanation">
+              <span class="depth-label">How</span>
+            </label>
+            <label class="depth-option" data-depth="why">
+              <input type="radio" name="depth" value="why" aria-label="Why - deep analysis">
+              <span class="depth-label">Why</span>
+            </label>
+          </div>
+          <button class="btn-icon settings-gear" onclick="showSettings()" aria-label="Open settings" title="Settings">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6 1h4l.5.5v2.3l1.1.6 1.9-.8 1.4 1.4-.8 1.9.6 1.1h2.3l.5.5v4l-.5.5h-2.3l-.6 1.1.8 1.9-1.4 1.4-1.9-.8-1.1.6v2.3l-.5.5H6l-.5-.5v-2.3l-1.1-.6-1.9.8-1.4-1.4.8-1.9L2.5 10H.2l-.5-.5v-4l.5-.5h2.3l.6-1.1-.8-1.9L3.7 1.5l1.9.8L6.5 1.8V1.5L6 1z"/></svg>
+          </button>
+        </header>
+
+        <div class="context-indicator" id="contextIndicator" aria-live="polite" hidden>
+          <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M2 2h12l.5.5v3l-.5.5H11V2.5H3v5h4V9H2.5l-.5-.5v-6l.5-.5zM9 6h5l.5.5v7l-.5.5H9l-.5-.5v-7l.5-.5zm1 1v6h3V7h-3z"/></svg>
+          <span id="contextLabel">No file selected</span>
+        </div>
+
+        <div class="chat-messages" id="chatMessages" role="log" aria-label="Chat messages" aria-live="polite">
+          <div class="message assistant">
+            <div class="message-avatar" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="14" height="14"><path fill="currentColor" d="M8 1a3 3 0 0 0-3 3v1h6V4a3 3 0 0 0-3-3zM4 7V5a4 4 0 1 1 8 0v2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H4z"/></svg>
+            </div>
+            <div class="message-content">
+              <div class="message-header">
+                <span class="message-role">CodeLens AI</span>
+                <span class="message-time" id="welcomeTime"></span>
+              </div>
+              <div class="message-body">
+                <p>Hello! I'm CodeLens AI, your intelligent code analysis assistant. Select code in your editor or ask me a question to get started.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="streaming-indicator" id="streamingIndicator" hidden aria-live="polite" role="status">
+          <span class="streaming-dot"></span>
+          <span class="streaming-dot"></span>
+          <span class="streaming-dot"></span>
+          <span class="streaming-text">Analyzing</span>
+        </div>
+
+        <div class="chat-input-area">
+          <button class="btn-icon attach-btn" id="attachBtn" aria-label="Attach code context" title="Attach code context">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8.5 2.5a3.5 3.5 0 1 1 7 0v6a5 5 0 0 1-10 0V4a1.5 1.5 0 0 1 3 0v4.5a2 2 0 0 1-4 0V4a.5.5 0 0 0-1 0v4.5a3 3 0 0 0 6 0V4a2.5 2.5 0 0 0-5 0v4.5a4 4 0 0 0 8 0v-6a2.5 2.5 0 0 0-5 0v5.5a.5.5 0 0 1-1 0V4a.5.5 0 0 0-1 0v5.5a2.5 2.5 0 0 0 5 0V4a2 2 0 0 0-4 0v4.5a5 5 0 0 0 10 0v-6a3.5 3.5 0 0 0-7 0v5.5z"/></svg>
+          </button>
+          <div class="textarea-wrapper">
+            <textarea class="chat-textarea" id="chatInput" rows="1" placeholder="Ask about your code..." aria-label="Chat message input" enterkeyhint="send"></textarea>
+          </div>
+          <button class="send-button" id="sendBtn" aria-label="Send message" title="Send message">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M1.5 1l13.5 7L1.5 15l3-7-3-7zm4.2 6H4l-1.2 2.7L11 8 5.7 7z"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- History Tab -->
+      <section class="tab-pane" id="panel-history" role="tabpanel" aria-labelledby="tab-history">
+        <header class="tab-pane-header">
+          <h2 class="pane-title">History</h2>
+          <div class="pane-actions">
+            <button class="btn btn-small btn-danger" id="clearHistoryBtn" aria-label="Clear all history">Clear All</button>
+            <button class="btn btn-small btn-primary" id="exportHistoryBtn" aria-label="Export history to markdown">Export</button>
+          </div>
+        </header>
+        <div class="search-bar">
+          <svg class="search-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M6.5 1a5.5 5.5 0 0 1 4.383 8.823l3.9 3.9-.707.707-3.9-3.9A5.5 5.5 0 1 1 6.5 1zm0 1a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z"/></svg>
+          <input type="text" class="search-input" id="historySearch" placeholder="Search history..." aria-label="Search history">
+        </div>
+        <div class="history-list" id="historyList" role="list" aria-label="History entries">
+          <div class="history-empty" id="historyEmpty">
+            <p>No history yet. Chat with CodeLens AI to see your history here.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bookmarks Tab -->
+      <section class="tab-pane" id="panel-bookmarks" role="tabpanel" aria-labelledby="tab-bookmarks">
+        <header class="tab-pane-header">
+          <h2 class="pane-title">Bookmarks</h2>
+        </header>
+        <div class="search-bar">
+          <svg class="search-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M6.5 1a5.5 5.5 0 0 1 4.383 8.823l3.9 3.9-.707.707-3.9-3.9A5.5 5.5 0 1 1 6.5 1zm0 1a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z"/></svg>
+          <input type="text" class="search-input" id="bookmarkSearch" placeholder="Filter by file name..." aria-label="Filter bookmarks">
+        </div>
+        <div class="bookmark-list" id="bookmarkList" role="list" aria-label="Bookmarked lines">
+          <div class="bookmark-empty" id="bookmarkEmpty">
+            <p>No bookmarks yet. Bookmark code lines to save them for later.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Tab -->
+      <section class="tab-pane" id="panel-settings" role="tabpanel" aria-labelledby="tab-settings">
+        <header class="tab-pane-header">
+          <h2 class="pane-title">Settings</h2>
+          <button class="btn btn-small" id="resetSettingsBtn">Reset to Defaults</button>
+        </header>
+        <div class="settings-scroll" id="settingsContainer">
+          <!-- Settings populated by JS -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script nonce="{{nonce}}" src="{{main_js}}"></script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CodeLens AI - AI-powered code analysis and learning platform">
+  <meta name="theme-color" content="#0d0d1a">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.json">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src https://openrouter.ai; img-src 'self' data:;">
+  <title>CodeLens AI</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- ===== HEADER ===== -->
+    <header class="app-header">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 100 100" width="24" height="24">
+          <path d="M50 12a8 8 0 0 0-8 8v12a24 24 0 0 0-12 20c0 13.2 10.8 24 24 24s24-10.8 24-24a24 24 0 0 0-12-20V20a8 8 0 0 0-16 0zm0 56c-8.8 0-16-7.2-16-16 0-6.6 4-12.3 9.7-14.7l1.4-.5V20a4.8 4.8 0 0 1 9.8 0v16.8l1.4.5A16 16 0 0 1 66 52c0 8.8-7.2 16-16 16z" fill="currentColor"/>
+          <circle cx="50" cy="80" r="4" fill="currentColor"/>
+        </svg>
+        <span class="logo-text">CodeLens AI</span>
+      </div>
+      <div class="header-controls">
+        <div class="depth-selector" role="radiogroup" aria-label="Explanation depth">
+          <label class="depth-option active" data-depth="what">
+            <input type="radio" name="header-depth" value="what" checked hidden>
+            <span>What</span>
+          </label>
+          <label class="depth-option" data-depth="how">
+            <input type="radio" name="header-depth" value="how" hidden>
+            <span>How</span>
+          </label>
+          <label class="depth-option" data-depth="why">
+            <input type="radio" name="header-depth" value="why" hidden>
+            <span>Why</span>
+          </label>
+          <label class="depth-option" data-depth="teach">
+            <input type="radio" name="header-depth" value="teach" hidden>
+            <span>Teach</span>
+          </label>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon" id="theme-toggle" title="Toggle theme (Ctrl+D)" aria-label="Toggle theme">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button class="btn-icon" id="settings-btn" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="app-main">
+      <div class="panel code-panel" id="code-panel">
+        <div class="editor-header">
+          <div class="editor-tabs">
+            <span class="editor-tab active">main.js</span>
+            <span class="editor-tab">styles.css</span>
+            <span class="editor-tab">index.html</span>
+          </div>
+          <div class="editor-actions">
+            <button class="btn-icon" id="format-btn" title="Format code" aria-label="Format code">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10H3M21 6H3M21 14H3M21 18H3"/>
+              </svg>
+            </button>
+            <button class="btn-icon" id="clear-btn" title="Clear editor" aria-label="Clear editor">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="editor-container" id="editor-container">
+          <div class="editor-gutter" id="editor-gutter">
+            <div class="gutter-line">1</div>
+            <div class="gutter-line">2</div>
+            <div class="gutter-line">3</div>
+            <div class="gutter-line">4</div>
+            <div class="gutter-line">5</div>
+            <div class="gutter-line">6</div>
+            <div class="gutter-line">7</div>
+            <div class="gutter-line">8</div>
+            <div class="gutter-line">9</div>
+            <div class="gutter-line">10</div>
+          </div>
+          <textarea class="editor-textarea" id="code-editor" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Paste or type your code here..." aria-label="Code editor"></textarea>
+        </div>
+        <div class="editor-footer">
+          <span class="editor-info" id="editor-info">Ln 1, Col 0</span>
+          <span class="editor-lang" id="editor-lang">JavaScript</span>
+        </div>
+      </div>
+
+      <div class="divider" id="panel-divider" role="separator" tabindex="0" aria-label="Resize panels"></div>
+
+      <div class="panel explanation-panel">
+        <div class="panel-header">
+          <span class="panel-title">Explanation</span>
+          <div class="panel-actions">
+            <button class="btn-icon" id="export-btn" title="Export as Markdown" aria-label="Export explanation" disabled>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="explanation-content" id="explanation-content">
+          <div class="empty-state explanation-empty">
+            <div class="empty-illustration">🔍</div>
+            <div class="empty-title">Waiting for code...</div>
+            <div class="empty-text">Paste your code in the editor and click "Explain Code" to get an AI-powered explanation.</div>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-primary" id="explain-btn">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+            </svg>
+            Explain Code
+            <span class="shortcut-hint">⌘↵</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB BAR ===== -->
+    <nav class="tab-bar" role="tablist" aria-label="Main navigation">
+      <button class="tab active" role="tab" aria-selected="true" data-tab="learn" tabindex="0">
+        <span class="tab-icon">📚</span>
+        <span class="tab-label">Learn</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="history" tabindex="-1">
+        <span class="tab-icon">📜</span>
+        <span class="tab-label">History</span>
+        <span class="tab-badge" id="history-badge" style="display:none">0</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="quiz" tabindex="-1">
+        <span class="tab-icon">🧪</span>
+        <span class="tab-label">Quiz</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="glossary" tabindex="-1">
+        <span class="tab-icon">📖</span>
+        <span class="tab-label">Glossary</span>
+      </button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="stats" tabindex="-1">
+        <span class="tab-icon">📊</span>
+        <span class="tab-label">Stats</span>
+      </button>
+    </nav>
+
+    <!-- ===== TAB CONTENT ===== -->
+    <div class="tab-content">
+      <!-- Learn Tab -->
+      <section class="tab-pane active" id="tab-learn" role="tabpanel" aria-labelledby="tab-learn-btn">
+        <div class="stats-grid compact" id="learn-summary">
+          <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-value" id="stat-explanations">0</div><div class="stat-label">Explanations</div></div>
+          <div class="stat-card"><div class="stat-icon">🧪</div><div class="stat-value" id="stat-quizzes">0</div><div class="stat-label">Quizzes</div></div>
+          <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-value" id="stat-streak">0</div><div class="stat-label">Day Streak</div></div>
+          <div class="stat-card"><div class="stat-icon">📖</div><div class="stat-value" id="stat-concepts">0</div><div class="stat-label">Concepts</div></div>
+        </div>
+        <div class="section-header">Spaced Repetition Reviews</div>
+        <div class="review-list" id="review-list">
+          <div class="empty-state small">
+            <div class="empty-text">No reviews due. Learn some code concepts first!</div>
+          </div>
+        </div>
+        <div class="section-header">Daily Streak</div>
+        <canvas id="streak-calendar" height="120"></canvas>
+      </section>
+
+      <!-- History Tab -->
+      <section class="tab-pane" id="tab-history" role="tabpanel" aria-labelledby="tab-history-btn">
+        <div class="history-controls">
+          <div class="search-bar">
+            <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input type="search" class="input search-input" id="history-search" placeholder="Search history...">
+          </div>
+          <div class="history-filters" id="history-filters">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="today">Today</button>
+            <button class="chip" data-filter="week">This Week</button>
+            <button class="chip" data-filter="month">This Month</button>
+          </div>
+        </div>
+        <div class="history-list" id="history-list">
+          <div class="empty-state">
+            <div class="empty-illustration">📜</div>
+            <div class="empty-title">No history yet</div>
+            <div class="empty-text">Explain some code and it will appear here.</div>
+          </div>
+        </div>
+        <div class="history-actions">
+          <button class="btn btn-danger btn-sm" id="clear-history-btn">Clear All</button>
+          <button class="btn btn-primary btn-sm" id="export-history-btn">Export All</button>
+        </div>
+      </section>
+
+      <!-- Quiz Tab -->
+      <section class="tab-pane" id="tab-quiz" role="tabpanel" aria-labelledby="tab-quiz-btn">
+        <div class="quiz-controls">
+          <button class="btn btn-primary" id="generate-quiz-btn">Generate Quiz from Code</button>
+        </div>
+        <div class="quiz-content" id="quiz-content">
+          <div class="empty-state">
+            <div class="empty-illustration">🧪</div>
+            <div class="empty-title">Ready to test your knowledge?</div>
+            <div class="empty-text">Click "Generate Quiz" to get questions based on your code.</div>
+          </div>
+        </div>
+        <div class="quiz-stats" id="quiz-stats" style="display:none">
+          <span>Score: <strong id="quiz-score">0/0</strong></span>
+          <span>Streak: <strong id="quiz-streak">0</strong></span>
+        </div>
+      </section>
+
+      <!-- Glossary Tab -->
+      <section class="tab-pane" id="tab-glossary" role="tabpanel" aria-labelledby="tab-glossary-btn">
+        <div class="glossary-search">
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input type="search" class="input search-input" id="glossary-search-input" placeholder="Search 160+ programming terms...">
+          <span class="glossary-count" id="glossary-count">160+ terms</span>
+        </div>
+        <div class="glossary-filters" id="glossary-filters"></div>
+        <div class="glossary-list" id="glossary-list">
+          <div class="empty-state">
+            <div class="empty-illustration">📖</div>
+            <div class="empty-title">Loading glossary...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Tab -->
+      <section class="tab-pane" id="tab-stats" role="tabpanel" aria-labelledby="tab-stats-btn">
+        <div class="stats-grid">
+          <div class="stat-card glass"><div class="stat-icon">📚</div><div class="stat-value" id="total-explanations">0</div><div class="stat-label">Total Explanations</div></div>
+          <div class="stat-card glass"><div class="stat-icon">🧪</div><div class="stat-value" id="total-quizzes">0</div><div class="stat-label">Quizzes Taken</div></div>
+          <div class="stat-card glass"><div class="stat-icon">🔥</div><div class="stat-value" id="streak-days">0</div><div class="stat-label">Day Streak</div></div>
+          <div class="stat-card glass"><div class="stat-icon">📖</div><div class="stat-value" id="concepts-learned">0</div><div class="stat-label">Concepts Learned</div></div>
+        </div>
+        <div class="section-header">Skill Levels</div>
+        <canvas id="radar-chart" height="250"></canvas>
+        <div class="section-header">Progress</div>
+        <div id="progress-bars"></div>
+        <div class="section-header" style="margin-top:16px">Achievements</div>
+        <div class="achievement-grid" id="achievement-grid"></div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

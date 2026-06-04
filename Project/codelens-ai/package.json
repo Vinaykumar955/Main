@@ -1,0 +1,327 @@
+{
+  "name": "codelens-ai",
+  "displayName": "CodeLens AI",
+  "description": "AI-powered code explanations, educational features, and inline learning",
+  "publisher": "codelens-ai",
+  "version": "1.0.0",
+  "main": "./out/extension.js",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Education",
+    "Programming Languages",
+    "Visualization"
+  ],
+  "keywords": [
+    "ai",
+    "code-explanation",
+    "education",
+    "learning",
+    "inline-decorations"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:python",
+    "onLanguage:java",
+    "onLanguage:go",
+    "onLanguage:rust",
+    "onLanguage:cpp",
+    "onLanguage:csharp",
+    "onLanguage:ruby",
+    "onLanguage:php",
+    "onLanguage:swift",
+    "onLanguage:kotlin",
+    "onLanguage:scala",
+    "onLanguage:r",
+    "onLanguage:sql",
+    "onCommand:codelens-ai.explainFile",
+    "onCommand:codelens-ai.explainSelection",
+    "onCommand:codelens-ai.toggleInline",
+    "onCommand:codelens-ai.quizMe",
+    "onCommand:codelens-ai.exportMarkdown",
+    "onCommand:codelens-ai.bookmarkLine",
+    "onCommand:codelens-ai.showHistory",
+    "onCommand:codelens-ai.openSettings",
+    "onCommand:codelens-ai.generatePractice",
+    "onCommand:codelens-ai.explainError",
+    "onView:codelens-ai.sidebarPanel"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "codelens-ai.explainFile",
+        "title": "CodeLens AI: Explain File"
+      },
+      {
+        "command": "codelens-ai.explainSelection",
+        "title": "CodeLens AI: Explain Selection"
+      },
+      {
+        "command": "codelens-ai.toggleInline",
+        "title": "CodeLens AI: Toggle Inline Explanations"
+      },
+      {
+        "command": "codelens-ai.quizMe",
+        "title": "CodeLens AI: Quiz Me on Code"
+      },
+      {
+        "command": "codelens-ai.exportMarkdown",
+        "title": "CodeLens AI: Export Explanations as Markdown"
+      },
+      {
+        "command": "codelens-ai.bookmarkLine",
+        "title": "CodeLens AI: Bookmark Line for Review"
+      },
+      {
+        "command": "codelens-ai.showHistory",
+        "title": "CodeLens AI: Show Explanation History"
+      },
+      {
+        "command": "codelens-ai.openSettings",
+        "title": "CodeLens AI: Open Settings"
+      },
+      {
+        "command": "codelens-ai.generatePractice",
+        "title": "CodeLens AI: Generate Practice Problems"
+      },
+      {
+        "command": "codelens-ai.explainError",
+        "title": "CodeLens AI: Explain Error"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codelens-ai",
+          "title": "CodeLens AI",
+          "icon": "$(lightbulb)"
+        }
+      ]
+    },
+    "views": {
+      "codelens-ai": [
+        {
+          "type": "webview",
+          "id": "codelens-ai.sidebarPanel",
+          "name": "CodeLens AI"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CodeLens AI",
+      "properties": {
+        "codelens-ai.apiKey": {
+          "type": "string",
+          "description": "OpenRouter API Key",
+          "scope": "application"
+        },
+        "codelens-ai.model": {
+          "type": "string",
+          "default": "qwen/qwen3-coder:free",
+          "enum": [
+            "qwen/qwen3-coder:free",
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "deepseek/deepseek-r1:free",
+            "openrouter/free"
+          ],
+          "description": "AI model to use for explanations"
+        },
+        "codelens-ai.depth": {
+          "type": "string",
+          "enum": [
+            "what",
+            "how",
+            "why"
+          ],
+          "default": "what",
+          "description": "Explanation depth level"
+        },
+        "codelens-ai.enableAnalogy": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable real-world analogies in explanations"
+        },
+        "codelens-ai.enableHeatmap": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable complexity heatmap overlay"
+        },
+        "codelens-ai.enableSmells": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable code smell detection"
+        },
+        "codelens-ai.chunkSize": {
+          "type": "number",
+          "default": 20,
+          "minimum": 5,
+          "maximum": 100,
+          "description": "Number of lines to explain at once"
+        },
+        "codelens-ai.maxTokens": {
+          "type": "number",
+          "default": 2048,
+          "description": "Maximum tokens per API call"
+        },
+        "codelens-ai.temperature": {
+          "type": "number",
+          "default": 0.3,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "AI response temperature (0=precise, 2=creative)"
+        },
+        "codelens-ai.dyslexiaMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable dyslexia-friendly font and spacing"
+        },
+        "codelens-ai.simplifyMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Simplify explanations for beginners"
+        },
+        "codelens-ai.highContrast": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable high-contrast decorations"
+        },
+        "codelens-ai.ttsEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable text-to-speech for explanations"
+        },
+        "codelens-ai.socraticMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Socratic questioning mode"
+        },
+        "codelens-ai.quizMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic quiz generation"
+        },
+        "codelens-ai.practiceMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable practice problem generation"
+        },
+        "codelens-ai.cacheSize": {
+          "type": "number",
+          "default": 500,
+          "description": "Maximum cache entries"
+        },
+        "codelens-ai.reducedMotion": {
+          "type": "boolean",
+          "default": false,
+          "description": "Reduce motion in UI animations"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "codelens-ai-explain",
+        "aliases": [
+          "CodeLens AI Explanation",
+          "codelens-ai-explain"
+        ],
+        "extensions": [
+          ".explain.md"
+        ]
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "codelens-ai.explainSelection",
+          "group": "codelens-ai@1"
+        },
+        {
+          "command": "codelens-ai.explainFile",
+          "group": "codelens-ai@2"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "codelens-ai.explainFile",
+        "key": "ctrl+shift+e",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "codelens-ai.explainSelection",
+        "key": "ctrl+shift+x",
+        "when": "editorTextFocus"
+      }
+    ],
+    "colors": [
+      {
+        "id": "codelens-ai.explanationBackground",
+        "description": "Background color for inline explanations",
+        "defaults": {
+          "dark": "#1a1a2e80",
+          "light": "#f0f0ff80",
+          "highContrast": "#000000"
+        }
+      },
+      {
+        "id": "codelens-ai.explanationBorder",
+        "description": "Border color for inline explanations",
+        "defaults": {
+          "dark": "#4a4a8a",
+          "light": "#6666aa",
+          "highContrast": "#ffffff"
+        }
+      },
+      {
+        "id": "codelens-ai.complexityBadge",
+        "description": "Color for complexity badges",
+        "defaults": {
+          "dark": "#eab308",
+          "light": "#ca8a04",
+          "highContrast": "#ffff00"
+        }
+      },
+      {
+        "id": "codelens-ai.smellHighlight",
+        "description": "Highlight color for code smells",
+        "defaults": {
+          "dark": "#ef444460",
+          "light": "#ef444460",
+          "highContrast": "#ff0000"
+        }
+      },
+      {
+        "id": "codelens-ai.vocabularyHighlight",
+        "description": "Highlight color for vocabulary terms",
+        "defaults": {
+          "dark": "#22c55e40",
+          "light": "#22c55e40",
+          "highContrast": "#00ff00"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node esbuild.js --production",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "lint": "eslint src --ext .ts",
+    "test": "node test-runner.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@vscode/test-electron": "^2.3.8",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.56.0",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

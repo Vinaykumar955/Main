@@ -1,0 +1,13 @@
+{
+  "name": "CodeLens AI",
+  "short_name": "CodeLens",
+  "description": "AI-powered code analysis and learning platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d1a",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "categories": ["education", "developer-tools", "productivity"]
+}

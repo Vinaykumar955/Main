@@ -1,0 +1,23 @@
+{
+  "name": "campusbazaar",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Hostel community second-hand marketplace",
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n SERVER,CLIENT -c green,cyan \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:client": "npm --workspace client run dev",
+    "dev:server": "npm --workspace server run dev",
+    "build": "npm --workspace client run build && npm --workspace server run build",
+    "lint": "npm --workspace client run lint",
+    "type-check": "npm --workspace client run type-check && npm --workspace server run type-check",
+    "seed": "npm --workspace server run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

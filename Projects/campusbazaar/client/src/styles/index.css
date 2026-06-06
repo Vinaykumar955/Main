@@ -1,0 +1,341 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+   GLOBAL TOKENS & RESET
+   Every Tailwind colour in the codebase (text-fg, bg-ink-200, border-line,
+   text-signal, …) is wired to a CSS variable below so light/dark mode and
+   the user-picked accent colour actually re-skin the UI.
+   ============================================================================= */
+
+:root {
+  /* — Base canvas */
+  --color-bg: #0A0A0A;
+  --color-bg-2: #141414;        /* ink-100 — alt background */
+  --color-bg-3: #0F0F0F;        /* ink-200 — sunken / chip */
+  --color-bg-4: #1A1A1A;        /* ink-50  — raised */
+  --color-bg-5: #050505;        /* ink-500 — deepest */
+
+  /* — Surface */
+  --color-surface: #141414;
+  --color-surface-raised: #1A1A1A;
+  --color-surface-sunken: #0A0A0A;
+  --color-surface-overlay: rgba(10, 10, 10, 0.85);
+
+  /* — Paper (light counterpart, used in some components) */
+  --color-paper: #F5F5F0;
+  --color-paper-50: #FBFBF8;
+  --color-paper-100: #F5F5F0;
+  --color-paper-200: #EFEEE6;
+  --color-paper-300: #E5E3D8;
+  --color-paper-400: #D1CFC2;
+  --color-paper-500: #B5B3A6;
+
+  /* — Text */
+  --color-fg: #F5F5F0;
+  --color-fg-muted: #9A9A95;
+  --color-fg-subtle: #6B6B68;
+  --color-fg-ghost: #3A3A38;
+
+  /* — Borders */
+  --color-line: #1F1F1F;
+  --color-line-strong: #2A2A2A;
+  --color-line-subtle: #161616;
+
+  /* — Signal (accent) */
+  --color-signal: #FF3B30;
+  --color-signal-50: #FFE8E6;
+  --color-signal-100: #FFCFCB;
+  --color-signal-200: #FF9F95;
+  --color-signal-300: #FF6F60;
+  --color-signal-400: #FF4D3F;
+  --color-signal-500: #FF3B30;
+  --color-signal-600: #E0271D;
+  --color-signal-700: #B81D14;
+  --color-signal-800: #8F160F;
+  --color-signal-900: #660F0A;
+
+  /* — Cyan (secondary signal) */
+  --color-cyan: #00E5FF;
+  --color-cyan-50: #E0FBFF;
+  --color-cyan-100: #B3F5FF;
+  --color-cyan-200: #80EFFF;
+  --color-cyan-300: #4DE9FF;
+  --color-cyan-400: #26E5FF;
+  --color-cyan-500: #00E5FF;
+  --color-cyan-600: #00B8CC;
+  --color-cyan-700: #008A99;
+  --color-cyan-800: #005C66;
+  --color-cyan-900: #002E33;
+
+  /* — Semantic */
+  --color-success: #00C853;
+  --color-warning: #FFB300;
+  --color-danger: #FF3B30;
+  --color-info: #00E5FF;
+
+  /* — Alpha utilities (for text on light vs dark) */
+  --alpha-fg-strong: rgb(245 245 240 / 0.12);
+  --alpha-fg-soft: rgb(245 245 240 / 0.06);
+  --alpha-fg-faint: rgb(245 245 240 / 0.04);
+  --alpha-bg-strong: rgb(10 10 10 / 0.85);
+  --alpha-bg-soft: rgb(10 10 10 / 0.5);
+
+  --ease-mech: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out-mech: cubic-bezier(0.7, 0, 0.3, 1);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Departure Mono", "JetBrains Mono", monospace;
+}
+
+.light {
+  --color-bg: #F5F5F0;
+  --color-bg-2: #FFFFFF;
+  --color-bg-3: #FBFBF8;
+  --color-bg-4: #FFFFFF;
+  --color-bg-5: #E5E3D8;
+
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FBFBF8;
+  --color-surface-sunken: #EFEEE6;
+  --color-surface-overlay: rgba(245, 245, 240, 0.9);
+
+  --color-paper: #F5F5F0;
+  --color-paper-50: #FBFBF8;
+  --color-paper-100: #F5F5F0;
+  --color-paper-200: #EFEEE6;
+  --color-paper-300: #E5E3D8;
+  --color-paper-400: #D1CFC2;
+  --color-paper-500: #B5B3A6;
+
+  --color-fg: #0A0A0A;
+  --color-fg-muted: #4A4A48;
+  --color-fg-subtle: #6B6B68;
+  --color-fg-ghost: #B5B3A6;
+
+  --color-line: #E5E3D8;
+  --color-line-strong: #D1CFC2;
+  --color-line-subtle: #EFEEE6;
+
+  --color-signal: #E0271D;
+  --color-signal-50: #FFE8E6;
+  --color-signal-100: #FFCFCB;
+  --color-signal-200: #FF9F95;
+  --color-signal-300: #FF6F60;
+  --color-signal-400: #FF4D3F;
+  --color-signal-500: #E0271D;
+  --color-signal-600: #B81D14;
+  --color-signal-700: #8F160F;
+
+  --alpha-fg-strong: rgb(10 10 10 / 0.10);
+  --alpha-fg-soft: rgb(10 10 10 / 0.05);
+  --alpha-fg-faint: rgb(10 10 10 / 0.03);
+  --alpha-bg-strong: rgb(245 245 240 / 0.85);
+  --alpha-bg-soft: rgb(245 245 240 / 0.5);
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  scroll-behavior: smooth;
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  transition: background-color 200ms var(--ease-mech), color 200ms var(--ease-mech);
+}
+
+@layer base {
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-bg);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line);
+    border: 2px solid var(--color-bg);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-line-strong);
+  }
+
+  *:focus-visible {
+    outline: 1px solid var(--color-signal);
+    outline-offset: 2px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+    user-select: none;
+  }
+}
+
+@layer utilities {
+  .text-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .glass {
+    background: color-mix(in oklab, var(--color-bg) 70%, transparent);
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+  }
+
+  .text-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .text-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+  }
+
+  .hairline-b {
+    box-shadow: inset 0 -1px 0 0 var(--color-line);
+  }
+
+  .hairline-t {
+    box-shadow: inset 0 1px 0 0 var(--color-line);
+  }
+
+  .corner-ticks {
+    position: relative;
+  }
+  .corner-ticks::before,
+  .corner-ticks::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-color: var(--color-fg-subtle);
+  }
+  .corner-ticks::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+  .corner-ticks::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+  }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 0%,
+      var(--color-surface-raised) 50%,
+      var(--color-surface) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.5s linear infinite;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 12px currentColor;
+  }
+
+  .scanline {
+    position: relative;
+    overflow: hidden;
+  }
+  .scanline::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in oklab, var(--color-signal) 8%, transparent) 50%,
+      transparent 100%
+    );
+    transform: translateY(-100%);
+    animation: scan-line 6s linear infinite;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Caret blink for the typewriter hero. */
+  .caret::after {
+    content: "▍";
+    display: inline-block;
+    margin-left: 2px;
+    color: var(--color-signal);
+    animation: caret-blink 1s steps(2) infinite;
+  }
+
+  @keyframes caret-blink {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+}
+
+/* Number counters in mono */
+.counter {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
